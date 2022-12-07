@@ -1,0 +1,74 @@
+#!/bin/bash
+DEVDIR=$HOME/www/dev
+WORKDIR=${WORKDIR:-/var/www}
+CONFIG_PATH=${1:-$DEVDIR/web-hosts.json}
+OUTPUT_DIR=${2:-$DEVDIR/nginx/sites}
+
+rm -rf $DEVDIR/nginx/sites/*.conf
+cp $DEVDIR/nginx/phpmyadmin.test.conf $DEVDIR/nginx/sites/
+
+if [ ! -f $CONFIG_PATH ]; then
+touch $CONFIG_PATH
+    cat <<EOT >$CONFIG_PATH
+{
+    "output": "~/www/dev/nginx/sites/",
+    "template": "~/www/dev/nginx/template.conf",
+    "workdir": "/var/www",
+    "hosts": [
+        {
+            "name": "example.test",
+            "type": "wordpress",
+            "db": "example_wp"
+        },
+        {
+            "name": "laravel.test",
+            "type": "laravel",
+            "db": "laravel_db"
+        }
+    ]
+}
+EOT
+    exit 1
+fi
+
+CONFIG=$(cat $CONFIG_PATH)
+
+for host in $(echo "${CONFIG}" | jq -r '.hosts[] | @base64'); do
+    _jq() {
+        echo ${host} | base64 -d | jq -r ${1}
+    }
+
+    HOSTNAME=$(_jq '.name')
+    type=$(_jq '.type')
+    DB=$(_jq '.db')
+    THEME=$(_jq '.theme')
+
+    NGINX_ROOT="$WORKDIR/$HOSTNAME"
+    SITE_CONF="$OUTPUT_DIR/$HOSTNAME.conf"
+    DEBUGOUT="$HOME/www/$HOSTNAME/.vscode"
+
+    if [[ $type == "laravel" ]]; then
+        NGINX_ROOT="$NGINX_ROOT/public"
+    fi
+
+    mkdir -p $DEBUGOUT
+    sed -e "s|\${HOSTNAME}|$HOSTNAME|g;" \
+        $DEVDIR/launch.json >$DEBUGOUT/launch.json
+
+    sed -e "s|\${APP_URL}|${HOSTNAME}|g;" \
+        -e "s|\${NGINX_ROOT}|${NGINX_ROOT}|g;" \
+        $DEVDIR/nginx/template.conf >$SITE_CONF
+
+    sed -e "s|\$DB_NAME|${DB}|g;" \
+        $DEVDIR/db/template.txt >$DEVDIR/db/$HOSTNAME.sql
+
+    for FILE in $(find $DEVDIR/db -type f -name "*.sql"); do
+        filename=$(basename $FILE)
+        cat $FILE | docker exec -i dev-mariadb-1 /usr/bin/mysql -u root --password=secret
+    done
+
+    if [[ $type == "wordpress" ]]; then
+        sed -i -e "s|# \${WORDPRESS}|include                 extras/wordpress.conf;|g" $SITE_CONF
+    fi
+
+done

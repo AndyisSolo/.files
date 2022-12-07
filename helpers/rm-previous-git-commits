@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function deletePreviousGithubCommits {
+  originUrl=$(git remote get-url origin)
+  rm -rf .git
+  git init
+  git add .
+  git commit -m 'initial commit'
+  git remote add origin $originUrl
+  git push --force -u origin master
+}
+
+read -p "Do you want to proceed? (yes/no) " yn
+
+case $yn in 
+	y* ) deletePreviousGithubCommits ;;
+	n* ) echo exiting...;
+		exit;;
+	* ) echo invalid response;
+		exit 1;;
+esac 

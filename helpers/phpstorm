@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+
+phpstorm64.exe $1
+

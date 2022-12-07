@@ -1,0 +1,53 @@
+#!/bin/bash
+
+CMD="$1"
+HOST="$2"
+DEST="$3"
+
+function gen_extfile() {
+    domain=$1
+    cat <<EOF
+		authorityKeyIdentifier=keyid,issuer\n
+		basicConstraints=CA:FALSE\n
+		keyUsage=digitalSignature,nonRepudiation,keyEncipherment,dataEncipherment\n
+		subjectAltName = @alt_names\n
+		[alt_names]\n
+		DNS.1 = $domain
+EOF
+}
+
+case "$CMD" in
+restart)
+    pushd $HOME/www/dev > /dev/null
+    webconf-build
+    docker compose restart nginx
+    popd > /dev/null
+    ;;
+rootssl)
+    [ -z "$2" ] && filename="rootCA" || filename="$2"
+    openssl genrsa -des3 -passout pass:default -out "$filename.key" 4096
+    openssl req -x509 -new -nodes -passin pass:default -key "$filename.key" -sha256 -days 20480 -subj "/C=GB/ST=London/L=London/O=Development/OU=IT Department/CN=Self Signed Certificate/emailAddress=info@example.com" -out rootCA.crt
+    ;;
+hostssl)
+    if [ -z $HOST ]; then
+        echo "Host argument is required"
+        exit 1
+    fi
+    extFile=$(gen_extfile $HOST)
+    openssl req -new -sha256 -nodes -out "$HOST.csr" -newkey rsa:2048 -days 20480 -subj "/C=GB/ST=London/L=London/O=$HOST/OU=IT Department/CN=$HOST Self Signed Certificate/emailAddress=info@$HOST" -keyout "$HOST.key"
+    openssl x509 -req -passin pass:default -in "$HOST.csr" -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out "$HOST.crt" -days 500 -sha256 -extfile <(printf "$extFile")
+    rm -f "$HOST.csr"
+    # openssl pkcs12 -export -passin pass:default  -inkey "$HOST.key" -in "$HOST.crt" -out "$HOST.pfx" -passout pass:
+    if ! [ -z $DEST ]; then
+        mv "$HOST*" $DEST
+    fi
+    ;;
+*) cat <<EOF ;;
+ssl-cert: Generates
+
+Allowed options:
+    - restart                         restart web server
+    - root {?filename} {?destination} generates root certificate. Default cirtificate basename is rootCA
+    - host {host} {?destination}      generates domain certificate
+EOF
+esac

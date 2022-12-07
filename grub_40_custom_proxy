@@ -1,0 +1,27 @@
+#!/bin/sh
+exec tail -n +3 $0
+# This file provides an easy way to add custom menu entries.  Simply type the
+# menu entries you want to add after this comment.  Be careful not to change
+# the 'exec tail' line above.
+menuentry 'Windows 10' {
+  savedefault
+  insmod part_gpt
+  insmod fat
+  search --no-floppy --fs-uuid --set=root 36D0-9512
+  chainloader /efi/Microsoft/Boot/bootmgfw.efi
+}
+
+
+menuentry 'Debian' {
+  load_video
+  gfxmode $linux_gfx_mode
+  insmod gzio
+  if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+  insmod part_gpt
+  insmod btrfs
+  search --no-floppy --fs-uuid --set=root ea2f6f5d-0a5a-430a-9c67-9ef64baed38c
+  echo	'Loading Linux 5.10.0-18-amd64 ...'
+  linux	/@boot/vmlinuz-5.10.0-18-amd64 root=UUID=ea2f6f5d-0a5a-430a-9c67-9ef64baed38c ro rootflags=subvol=@  quiet
+  echo	'Loading initial ramdisk ...'
+  initrd	/@boot/initrd.img-5.10.0-18-amd64
+}

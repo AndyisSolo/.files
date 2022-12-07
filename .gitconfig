@@ -1,0 +1,16 @@
+[user]
+	email = andrius.solopovas@gmail.com
+	name = andrius
+[alias]
+[core]
+	excludesfile = ~/.globignore
+[pull]
+	rebase = true
+[init]
+	defaultBranch = master
+
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+
+[submodule]
+	recurse = true

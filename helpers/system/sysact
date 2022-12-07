@@ -1,0 +1,35 @@
+#!/bin/sh
+
+cmds="\
+leave
+suspend 
+reboot 
+shutdown
+"
+
+choice="$(echo "$cmds" | cut -d' ' -f 1 | dmenu)"
+
+case $choice in
+
+  l*)
+      $cryptomatorPID = $(pgrep Cryptomator)
+      if pgrep -x "Cryptomator" > /dev/null; then
+        kill -TERM $cryptomatorPID
+      fi
+      fusermount -uz /home/$USER/gdrive; 
+      kill -TERM $(pidof -s xmonad-x86_64-linux)
+    ;;
+
+  s*)
+    sudo -A systemctl suspend
+    ;;
+
+  r*)
+    sudo -A systemctl reboot
+    ;;
+
+  s*)
+    sudo -A systemctl poweroff
+    ;;
+
+esac
