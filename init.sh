@@ -94,17 +94,9 @@ if [ "$SILENT" = false ]; then
 fi
 
 # print status of global variables
-printGreen "OS: $OS"
-printGreen "FISH: $FISH"
-printGreen "FDFIND: $FDFIND"
-printGreen "FZF: $FZF"
-printGreen "NVM: $NVM"
-printGreen "NVIM: $NVIM"
-printGreen "ZSH: $ZSH"
-printGreen "OHMYFISH: $OHMYFISH"
-printGreen "OHMYBASH: $OHMYBASH"
-printGreen "OHMYZSH: $OHMYZSH"
-printGreen "FORCE: $FORCE"
+touch /tmp/dotfiles.log
+printGreen "DOTFILES: ${DOTFILES[*]}" > /tmp/dotfiles.log
+
 
 pushd $HOME >/dev/null
 
