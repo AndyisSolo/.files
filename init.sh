@@ -130,6 +130,10 @@ fi
 touch $HOME/.cache/.zsh_history
 
 printGreen "CREATING SYMLINKS ..."
+if [ "$NVIM" = "true"]; then
+    DOTFILES+=(".config/nvim")
+fi
+
 mkdir -p $HOME/.local/bin
 echo "$HOME/dotfiles/helpers $HOME/.local/bin/helpers" | awk '{ printf "%-40s => %-40s\n", $1, $2}'
 ln -sf $HOME/dotfiles/helpers $HOME/.local/bin
