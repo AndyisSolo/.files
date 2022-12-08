@@ -189,6 +189,7 @@ if [ "$NVIM" = true ] && [ ! -d "$HOME/.local/share/nvim/site/autoload/" ] || [ 
     if [ "$OS" = "ubuntu" ] || [ ""$OS"" = "debian" ]; then
         sudo add-apt-repository -y ppa:neovim-ppa/stable >/dev/null
         sudo apt update -qq -y >/dev/null
+        $PI r vim >/dev/null
     fi
     if [ ! "$OS" = "alpine" ]; then
         $PI i neovim >/dev/null
