@@ -15,7 +15,7 @@ function printClr() {
     fi
 
     printf "${COLOR}------------------------------------------${NC}\n"
-    printf "${COLOR}$1${NC}\n"
+    printf "${COLOR}$2${NC}\n"
     printf "${COLOR}------------------------------------------${NC}\n"
 }
 
