@@ -201,7 +201,9 @@ if [ "$NVIM" = true ] && [ ! -d "$HOME/.local/share/nvim/site/autoload/" ] || [ 
         sudo add-apt-repository -y ppa:neovim-ppa/stable >/dev/null
         sudo apt update -qq -y >/dev/null
     fi
-    $PI i neovim >/dev/null
+    if [ ! "$OS" = "alpine" ]; then
+        $PI i neovim >/dev/null
+    fi
 
     printGreen "INSTALLING NVIM PLUG..."
     rm -rf $HOME/.local/share/nvim/site/autoload/
