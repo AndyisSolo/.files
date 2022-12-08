@@ -67,10 +67,10 @@ installPackage() {
 }
 
 case "$1" in
-*)
+i* | inst* | install)
     installPackage $2
     ;;
-r*)
+r* | rm* | rem* | remove)
     removePackage $2
     ;;
 h*) cat <<EOF ;;
