@@ -1,61 +1,79 @@
 #!/bin/bash
-
 OS=$(awk '/^ID=/' /etc/os-release | sed -e 's/ID=//' -e 's/"//g' | tr '[:upper:]' '[:lower:]')
 
+function printClr() {
+    GREEN='\033[0;32m'
+    RED="\033[31m"
+    NC='\033[0m'
+
+    COLOR=$1
+    if [ "$color" = "red" ]; then
+        COLOR=$RED
+    if [ "$color" = "green" ]; then
+        COLOR=$GREEN
+    fi
+
+    printf "${COLOR}------------------------------------------${NC}\n"
+    printf "${COLOR}$1${NC}\n"
+    printf "${COLOR}------------------------------------------${NC}\n"
+}
+
 command_exists() {
-	command -v $1 >/dev/null 2>&1
+    command -v $1 >/dev/null 2>&1
 }
 
 is_sudoer() {
-  sudo -v > /dev/null 2>&1
+    sudo -v >/dev/null 2>&1
 }
 
 removePackage() {
-  if command_exists $1 && is_sudoer; then
-    case $OS in
-      ubuntu|debian)
-        sudo apt remove -y $1;
-        ;;
-      centos)
-        sudo yum remove -y $1;
-        ;;
-      arch)
-        sudo pacman -Rns --noconfirm $1;
-        ;;
-      alpine)
-        sudo apk del $1
-        ;;
-    esac
-  fi
+    printClr red "Removing $1 ..."
+    if command_exists $1 && is_sudoer; then
+        case $OS in
+        ubuntu | debian)
+            sudo apt remove -y $1
+            ;;
+        centos)
+            sudo yum remove -y $1
+            ;;
+        arch)
+            sudo pacman -Rns --noconfirm $1
+            ;;
+        alpine)
+            sudo apk del $1
+            ;;
+        esac
+    fi
 }
 
 installPackage() {
-  if ! command_exists $1 && is_sudoer; then
-    case $OS in
-      ubuntu|debian)
-        sudo apt install -y $1;
-        ;;
-      centos)
-        sudo yum install -y $1;
-        ;;
-      arch)
-        sudo pacman -S --noconfirm $1;
-        ;;
-      alpine)
-        sudo apk add $1
-        ;;
-    esac
-  fi
+    printClr green "Installing $1 ..."
+    if ! command_exists $1 && is_sudoer; then
+        case $OS in
+        ubuntu | debian)
+            sudo apt install -y $1
+            ;;
+        centos)
+            sudo yum install -y $1
+            ;;
+        arch)
+            sudo pacman -S --noconfirm $1
+            ;;
+        alpine)
+            sudo apk add $1
+            ;;
+        esac
+    fi
 }
 
 case "$1" in
-  *)
+*)
     installPackage $2
     ;;
-  r*)
+r*)
     removePackage $2
     ;;
-  h*) cat << EOF
+h*) cat <<EOF ;;
 Usage Example:
     p i/inst/install [package-name]
     p rm/rem/remove [package-name]
