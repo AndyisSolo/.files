@@ -99,24 +99,6 @@ if [ "$SILENT" = false ]; then
     fi
 fi
 
-# print status of global variables
-debug=$(
-    cat <<EOF
-FISH: $FISH
-FDFIND: $FDFIND
-FZF: $FZF
-NVM: $NVM
-NVIM: $NVIM
-ZSH: $ZSH
-OHMYFISH: $OHMYFISH
-OHMYBASH: $OHMYBASH
-OHMYZSH: $OHMYZSH
-FORCE: $FORCE
-DOTFILES: ${DOTFILES[@]}
-EOF
-)
-echo "$debug" >/tmp/dotfiles.log
-
 pushd $HOME >/dev/null
 
 if [ ! -d "$HOME/dotfiles" ] || [ "$FORCE" = true ] && [ -f "$HOME/.ssh/id_rsa" ]; then
