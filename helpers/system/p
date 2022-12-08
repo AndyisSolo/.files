@@ -11,9 +11,9 @@ is_sudoer() {
 }
 
 removePackage() {
-  if ! command_exists $1 && is_sudoer; then
+  if command_exists $1 && is_sudoer; then
     case $OS in
-      ubuntu)
+      ubuntu|debian)
         sudo apt remove -y $1;
         ;;
       centos)
@@ -32,7 +32,7 @@ removePackage() {
 installPackage() {
   if ! command_exists $1 && is_sudoer; then
     case $OS in
-      ubuntu)
+      ubuntu|debian)
         sudo apt install -y $1;
         ;;
       centos)
