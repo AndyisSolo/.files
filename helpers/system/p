@@ -9,6 +9,7 @@ function printClr() {
     COLOR=$1
     if [ "$color" = "red" ]; then
         COLOR=$RED
+    fi
     if [ "$color" = "green" ]; then
         COLOR=$GREEN
     fi
