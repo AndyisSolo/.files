@@ -94,9 +94,21 @@ if [ "$SILENT" = false ]; then
 fi
 
 # print status of global variables
-touch /tmp/dotfiles.log
-printGreen "DOTFILES: ${DOTFILES[*]}" > /tmp/dotfiles.log
-
+debug=$(
+    cat <<EOF
+FISH: $FISH
+FDFIND: $FDFIND
+FZF: $FZF
+NVM: $NVM
+NVIM: $NVIM
+ZSH: $ZSH
+OHMYFISH: $OHMYFISH
+OHMYBASH: $OHMYBASH
+OHMYZSH: $OHMYZSH
+FORCE: $FORCE
+EOF
+)
+echo "$debug" >/tmp/dotfiles.log
 
 pushd $HOME >/dev/null
 
