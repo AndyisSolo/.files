@@ -33,10 +33,10 @@ OHMYFISH="${OHMYFISH:-false}"
 OHMYBASH="${OHMYBASH:-false}"
 OHMYZSH="${OHMYZSH:-false}"
 FORCE="${FORCE:-false}"
-if [ "$NVIM" = "true"]; then
+if [ "$NVIM" = true ]; then
     DOTFILES+=(".config/nvim")
 fi
-if [ "$ZSH" = "true"]; then
+if [ "$ZSH" = true ]; then
     DOTFILES+=(".config/.zshrc")
 fi
 
