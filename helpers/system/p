@@ -22,6 +22,9 @@ removePackage() {
       arch)
         sudo pacman -Rns --noconfirm $1;
         ;;
+      alpine)
+        sudo apk del $1
+        ;;
     esac
   fi
 }
@@ -37,6 +40,9 @@ installPackage() {
         ;;
       arch)
         sudo pacman -S --noconfirm $1;
+        ;;
+      alpine)
+        sudo apk add $1
         ;;
     esac
   fi
