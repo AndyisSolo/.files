@@ -6,11 +6,10 @@ function printClr() {
     RED="\033[31m"
     NC='\033[0m'
 
-    COLOR=$1
-    if [ "$color" = "red" ]; then
+    if [ "$1" = "red" ]; then
         COLOR=$RED
     fi
-    if [ "$color" = "green" ]; then
+    if [ "$1" = "green" ]; then
         COLOR=$GREEN
     fi
 
