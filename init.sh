@@ -216,7 +216,7 @@ if [ "$NVIM" = true ] && [ ! -d "$HOME/.local/share/nvim/site/autoload/" ] || [ 
     rm -rf $HOME/.local/share/nvim/site/autoload/
     curl -sfLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    bash -c "nvim +silent +PlugInstall +qall" >/dev/null
+    bash -c "nvim +silent +PlugInstall +qall"
 fi
 
 if [ "$OHMYBASH" = true ] && [ ! -d "$HOME/.local/share/ohmybash" ] || [ "$FORCE" = true ]; then
