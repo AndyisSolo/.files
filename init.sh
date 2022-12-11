@@ -14,7 +14,7 @@ function printGreen() {
     printf "${GREEN}------------------------------------------${NC}\n"
 }
 
-DOTFILES=(
+CONFDIRS=(
     ".config/.func"
     ".config/.aliasrc"
     ".config/inputrc"
@@ -23,6 +23,7 @@ DOTFILES=(
 )
 PI=$HOME/dotfiles/helpers/system/p
 
+DOTFILES="${DOTFILES:-true}"
 FISH="${FISH:-false}"
 FDFIND="${FDFIND:-false}"
 FZF="${FZF:-false}"
@@ -33,16 +34,11 @@ OHMYFISH="${OHMYFISH:-false}"
 OHMYBASH="${OHMYBASH:-false}"
 OHMYZSH="${OHMYZSH:-false}"
 FORCE="${FORCE:-false}"
-if [ "$NVIM" = true ]; then
-    DOTFILES+=(".config/nvim")
-fi
-if [ "$ZSH" = true ]; then
-    DOTFILES+=(".config/.zshrc")
-fi
 
 if [ "$SILENT" = false ]; then
     CHOICES=$(
         whiptail --title "Dotfiles" --checklist --separate-output "Choose:" 16 60 9 \
+            "DOTFILES" "Dotfiles   " ON \
             "FISH" "Unix shell   " ON \
             "FDFIND" "Unix find replacement   " ON \
             "FZF" "Fuzzy Find   " ON \
@@ -62,6 +58,9 @@ if [ "$SILENT" = false ]; then
     else
         for CHOICE in $CHOICES; do
             case "$CHOICE" in
+            "DOTFILES")
+                DOTFILES=true
+                ;;
             "FISH")
                 FISH=true
                 ;;
@@ -101,28 +100,48 @@ fi
 
 pushd $HOME >/dev/null
 
-if [ ! -d "$HOME/dotfiles" ] || [ "$FORCE" = true ] && [ -f "$HOME/.ssh/id_rsa" ]; then
-    printGreen "DOWNLOADING DOTFILES..."
-    git clone git@github.com:asolopovas/dotfiles.git >/dev/null
+if [ "$DOTFILES" = true ]; then
+    URL="git@github.com:asolopovas/dotfiles.git"
+    if [ ! -f "$HOME/.ssh/id_rsa" ]; then
+        URL="https://github.com/asolopovas/dotfiles.git"
+    fi
+
+    if [ "$FORCE" = true ]; then
+        rm -rf $HOME/dotfiles
+    fi
+
+    if [ ! -d "$HOME/dotfiles" ]; then
+        printGreen "DOWNLOADING DOTFILES..."
+        git clone $URL $HOME/dotfiles >/dev/null
+    fi
 fi
 
-if [ ! -d "$HOME/dotfiles" ] || [ "$FORCE" = true ] && [ ! -f "$HOME/.ssh/id_rsa" ]; then
-    printGreen "DOWNLOADING DOTFILES..."
-    git clone https://github.com/asolopovas/dotfiles.git >/dev/null
-fi
-
-[ ! -d $HOME/.local/bin ] && mkdir -p $HOME/.local/bin
-[ ! -d $HOME/.local/share ] && mkdir -p $HOME/.local/share
-[ ! -d $HOME/.config ] && mkdir -p $HOME/.config
-[ ! -d $HOME/.cache ] && mkdir -p $HOME/.cache
+printGreen "CREATING DEFAULT DIRS ..."
+DEFAULT_DIR=(
+    ".local/bin"
+    ".local/share"
+    ".local/.config"
+    ".local/.cache"
+)
+for DIR in "${DEFAULT_DIR[@]}"; do
+    if [ ! -d "$HOME/$DIR" ]; then
+        printf "Creating $HOME/$DIR ...\n"
+        mkdir -p "$HOME/$DIR"
+    fi
+done
 touch $HOME/.cache/.zsh_history
 
+if [ "$NVIM" = true ]; then
+    CONFDIRS+=(".config/nvim")
+fi
+if [ "$ZSH" = true ]; then
+    CONFDIRS+=(".config/.zshrc")
+fi
 printGreen "CREATING SYMLINKS ..."
-
 mkdir -p $HOME/.local/bin
 echo "$HOME/dotfiles/helpers $HOME/.local/bin/helpers" | awk '{ printf "%-40s => %-40s\n", $1, $2}'
 ln -sf $HOME/dotfiles/helpers $HOME/.local/bin
-for src in "${DOTFILES[@]}"; do
+for src in "${CONFDIRS[@]}"; do
     echo "$HOME/dotfiles/$src $HOME/$src" | awk '{ printf "%-40s => %-40s\n", $1, $2}'
     if [ -d "$HOME/$src" ]; then
         rm -rf $HOME/$src
@@ -130,7 +149,7 @@ for src in "${DOTFILES[@]}"; do
     ln -sf $HOME/dotfiles/$src $HOME/$src
 done
 
-if [ "$FISH" = true ] && ! command -v fish &>/dev/null || [ "$FORCE" = true ]; then
+if [ "$FISH" = true ] && ! command -v fish &>/dev/null; then
     printGreen "INSTALLING FISH..."
     if [ "$OS" = "ubuntu" ] || [ "$OS" = "debian" ]; then
         sudo apt-add-repository -y ppa:fish-shell/release-3 >/dev/null 2>&1
@@ -139,75 +158,99 @@ if [ "$FISH" = true ] && ! command -v fish &>/dev/null || [ "$FORCE" = true ]; t
     $PI i fish >/dev/null
 fi
 
-if [ "$NVM" = true ] && [ ! -d "$HOME/.nvm" ] || [ "$FORCE" = true ]; then
-    printGreen "INSTALLING NVM ..."
-    if [ "$OS" = "alpine" ]; then
-        NVM_NODEJS_ORG_MIRROR=https://unofficial-builds.nodejs.org/download/release
-        echo 'nvm_get_arch() { nvm_echo "x64-musl"; }' | tee -a $HOME/.zshrc $HOME/.bashrc
+if [ "$NVM" = true ]; then
+    if [ "$FORCE" = true ]; then
+        rm -rf $HOME/.nvm
     fi
-    curl -sO https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh
-    chmod +x install.sh >/dev/null
-    ./install.sh >/dev/null 2>&1
-    rm -rf install.sh >/dev/null
-    source $HOME/.nvm/nvm.sh >/dev/null
-    source $HOME/.bashrc >/dev/null
-    nvm install $NODEVER >/dev/null
-    npm install -g yarn >/dev/null
+
+    if [ ! -d "$HOME/.nvm" ]; then
+        printGreen "INSTALLING NVM ..."
+        if [ "$OS" = "alpine" ]; then
+            NVM_NODEJS_ORG_MIRROR=https://unofficial-builds.nodejs.org/download/release
+            echo 'nvm_get_arch() { nvm_echo "x64-musl"; }' | tee -a $HOME/.bashrc
+        fi
+        curl -sO https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh
+        chmod +x install.sh >/dev/null
+        ./install.sh >/dev/null 2>&1
+        rm -rf install.sh >/dev/null
+        source $HOME/.nvm/nvm.sh >/dev/null
+        source $HOME/.bashrc >/dev/null
+        nvm install $NODEVER >/dev/null
+        npm install -g yarn >/dev/null
+    fi
 fi
 
-if [ "$OHMYFISH" = true ] && command -v fish &>/dev/null && [ ! -d "$HOME/.local/share/omf" ] || [ "$FORCE" = true ]; then
-    printGreen "INSTALLING OH-MY-FISH..."
-    rm -rf $HOME/.local/share/omf
-    rm -rf $HOME/.config/omf
-    curl -sO https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install
-    fish install --noninteractive --path=~/.local/share/omf --config=~/.config/omf >/dev/null
-    fish -c "omf install bass"
-    fish -c "omf install agnoster"
-    fish -c "omf theme agnoster"
-    rm -rf install
+if [ "$OHMYFISH" = true ] && command -v fish &>/dev/null; then
+    if [ "$FORCE" = true ]; then
+        rm -rf $HOME/.local/share/omf
+        rm -rf $HOME/.config/omf
+    fi
+
+    if [ ! -d "$HOME/.local/share/omf" ]; then
+        printGreen "INSTALLING OH-MY-FISH..."
+        curl -sO https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install
+        fish install --noninteractive --path=~/.local/share/omf --config=~/.config/omf >/dev/null
+        fish -c "omf install bass"
+        fish -c "omf install agnoster"
+        fish -c "omf theme agnoster"
+        rm -rf install
+    fi
 fi
 
-if [ "$FDFIND" = true ] || [ "$FORCE" = true ]; then
+if [ "$FDFIND" = true ] && ([ "$OS" = "ubuntu" ] || [ ""$OS"" = "debian" ]); then
     printGreen "INSTALLING FDFIND..."
-    if [ "$OS" = "ubuntu" ] || [ ""$OS"" = "debian" ]; then
-        curl -fsSLO https://github.com/sharkdp/fd/releases/download/v8.5.3/fd-musl_8.5.3_amd64.deb >/dev/null
-        sudo dpkg -i fd-musl_8.5.3_amd64.deb
-        rm -rf fd-musl_8.5.3_amd64.deb
+    curl -fsSLO https://github.com/sharkdp/fd/releases/download/v8.5.3/fd-musl_8.5.3_amd64.deb >/dev/null
+    sudo dpkg -i fd-musl_8.5.3_amd64.deb
+    rm -rf fd-musl_8.5.3_amd64.deb
+fi
+
+if [ "$FZF" = true ]; then
+    if [ "$FORCE" = true ]; then
+        rm -f $HOME/.local/bin/fzf
+    fi
+
+    if [ ! -f "$HOME/.local/bin/fzf" ]; then
+        printGreen "INSTALLING FZF..."
+        curl -fsSLO https://github.com/junegunn/fzf/releases/download/0.35.1/fzf-0.35.1-linux_amd64.tar.gz
+        tar -xf fzf-0.35.1-linux_amd64.tar.gz
+        mv fzf $HOME/.local/bin
+        rm -f fzf-0.35.1-linux_amd64.tar.gz
     fi
 fi
 
-if [ "$FZF" = true ] || [ "$FORCE" = true ]; then
-    printGreen "INSTALLING FZF..."
-    curl -fsSLO https://github.com/junegunn/fzf/releases/download/0.35.1/fzf-0.35.1-linux_amd64.tar.gz
-    tar -xf fzf-0.35.1-linux_amd64.tar.gz
-    mv fzf $HOME/.local/bin
-    rm -rf fzf-0.35.1-linux_amd64.tar.gz
-fi
-
-if [ "$NVIM" = true ] && [ ! -d "$HOME/.local/share/nvim/site/autoload/" ] || [ "$FORCE" = true ]; then
-    printGreen "INSTALLING NVIM..."
+if [ "$NVIM" = true ]; then
     if [ "$OS" = "ubuntu" ] || [ ""$OS"" = "debian" ]; then
+        printGreen "INSTALLING NVIM..."
         sudo add-apt-repository -y ppa:neovim-ppa/stable >/dev/null
         sudo apt update -qq -y >/dev/null
         $PI r vim >/dev/null
     fi
+
     if [ ! "$OS" = "alpine" ]; then
         $PI i neovim >/dev/null
     fi
 
-    printGreen "INSTALLING NVIM PLUG..."
-    rm -rf $HOME/.local/share/nvim/site/autoload/
-    curl -sfLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    bash -c "nvim +silent +PlugInstall +qall"
+    if [ "$FORCE" = true ]; then
+        rm -rf $HOME/.local/share/nvim/site/autoload/
+    fi
+
+    if [ ! -d "$HOME/.local/share/nvim/site/autoload/" ]; then
+        printGreen "INSTALLING NVIM PLUG..."
+        curl -sfLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+            https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        bash -c "nvim +silent +PlugInstall +qall"
+    fi
 fi
 
-if [ "$OHMYBASH" = true ] && [ ! -d "$HOME/.local/share/ohmybash" ] || [ "$FORCE" = true ]; then
-    printGreen "INSTALLING OH-MY-BASH..."
+if [ "$OHMYBASH" = true ]; then
     if [ "$FORCE" = true ]; then
         rm -rf $HOME/.local/share/ohmybash
     fi
-    git clone https://github.com/ohmybash/oh-my-bash.git $HOME/.local/share/ohmybash
+
+    if [ ! -d "$HOME/.local/share/ohmybash" ]; then
+        printGreen "INSTALLING OH-MY-BASH..."
+        git clone https://github.com/ohmybash/oh-my-bash.git $HOME/.local/share/ohmybash
+    fi
 fi
 
 if [ "$ZSH" = true ]; then
@@ -215,11 +258,17 @@ if [ "$ZSH" = true ]; then
     $PI i zsh >/dev/null
 fi
 
-if [ "$OHMYZSH" = true ] && [ ! -d "$HOME/.local/share/ohmyzsh" ] || [ "$FORCE" = true ]; then
-    printGreen "INSTALLING OH-MY-ZSH..."
-    ZSH="$HOME/.local/share/ohmyzsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-    ln -sf $HOME/dotfiles/.config/zsh $HOME/.config/zsh
-    ln -sf $HOME/dotfiles/.config/zsh/.zshrc $HOME/.zshrc
+if [ "$OHMYZSH" = true ]; then
+    if [ "$FORCE" = true ]; then
+        rm -rf $HOME/.oh-my-zsh
+    fi
+
+    if [ ! -d "$HOME/.local/share/ohmyzsh" ]; then
+        printGreen "INSTALLING OH-MY-ZSH..."
+        ZSH="$HOME/.local/share/ohmyzsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+        ln -sf $HOME/dotfiles/.config/zsh $HOME/.config/zsh
+        ln -sf $HOME/dotfiles/.config/zsh/.zshrc $HOME/.zshrc
+    fi
 fi
 
 if [ "$FISH" = true ] && [ "$SHELL" != "/usr/bin/fish" ] && [ "$SILENT" = false ]; then
