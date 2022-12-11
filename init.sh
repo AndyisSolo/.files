@@ -15,7 +15,6 @@ function printGreen() {
 }
 
 PI=$HOME/dotfiles/helpers/system/p
-
 DOTFILES="${DOTFILES:-true}"
 FISH="${FISH:-false}"
 FDFIND="${FDFIND:-false}"
@@ -112,6 +111,7 @@ DEFAULT_DIRS=(
     ".local/.config"
     ".local/.cache"
 )
+
 for DIR in "${DEFAULT_DIRS[@]}"; do
     if [ ! -d "$HOME/$DIR" ]; then
         printf "Creating $HOME/$DIR ...\n"
@@ -129,15 +129,15 @@ CONFDIRS=(
     ".config/fish"
     ".bashrc"
 )
+
 if [ "$NVIM" = true ]; then
     CONFDIRS+=(".config/nvim")
 fi
+
 if [ "$ZSH" = true ]; then
     CONFDIRS+=(".config/.zshrc")
 fi
-mkdir -p $HOME/.local/bin
-echo "$HOME/dotfiles/helpers $HOME/.local/bin/helpers" | awk '{ printf "%-40s => %-40s\n", $1, $2}'
-ln -sf $HOME/dotfiles/helpers $HOME/.local/bin
+
 for src in "${CONFDIRS[@]}"; do
     echo "$HOME/dotfiles/$src $HOME/$src" | awk '{ printf "%-40s => %-40s\n", $1, $2}'
     if [ -d "$HOME/$src" ]; then
@@ -145,6 +145,8 @@ for src in "${CONFDIRS[@]}"; do
     fi
     ln -sf $HOME/dotfiles/$src $HOME/$src
 done
+echo "$HOME/dotfiles/helpers $HOME/.local/bin/helpers" | awk '{ printf "%-40s => %-40s\n", $1, $2}'
+ln -sf $HOME/dotfiles/helpers $HOME/.local/bin
 
 if [ "$FISH" = true ] && ! command -v fish &>/dev/null; then
     printGreen "INSTALLING FISH..."
@@ -177,6 +179,7 @@ if [ "$NVM" = true ]; then
     fi
 fi
 
+
 if [ "$OHMYFISH" = true ] && command -v fish &>/dev/null; then
     if [ "$FORCE" = true ]; then
         rm -rf $HOME/.local/share/omf
@@ -194,12 +197,14 @@ if [ "$OHMYFISH" = true ] && command -v fish &>/dev/null; then
     fi
 fi
 
+
 if [ "$FDFIND" = true ] && ! command -v fd &>/dev/null && ([ "$OS" = "ubuntu" ] || [ ""$OS"" = "debian" ]); then
     printGreen "INSTALLING FDFIND..."
     curl -fsSLO https://github.com/sharkdp/fd/releases/download/v8.5.3/fd-musl_8.5.3_amd64.deb >/dev/null
     sudo dpkg -i fd-musl_8.5.3_amd64.deb
     rm -rf fd-musl_8.5.3_amd64.deb
 fi
+
 
 if [ "$FZF" = true ]; then
     if [ "$FORCE" = true ]; then
@@ -214,6 +219,7 @@ if [ "$FZF" = true ]; then
         rm -f fzf-0.35.1-linux_amd64.tar.gz
     fi
 fi
+
 
 if [ "$NVIM" = true ]; then
     if [ "$OS" = "ubuntu" ] || [ ""$OS"" = "debian" ]; then
@@ -231,13 +237,14 @@ if [ "$NVIM" = true ]; then
         rm -rf $HOME/.local/share/nvim/site/autoload
     fi
 
-    if [ ! -d "$HOME/.local/share/nvim/site/autoload/" ]; then
+    if [ ! -d "$HOME/.local/share/nvim/site/autoload" ]; then
         printGreen "INSTALLING NVIM PLUG..."
         curl -sfLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
             https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
         bash -c "nvim +silent +PlugInstall +qall"
     fi
 fi
+
 
 if [ "$OHMYBASH" = true ]; then
     if [ "$FORCE" = true ]; then
@@ -249,6 +256,7 @@ if [ "$OHMYBASH" = true ]; then
         git clone https://github.com/ohmybash/oh-my-bash.git $HOME/.local/share/ohmybash
     fi
 fi
+
 
 if [ "$ZSH" = true ]; then
     printGreen "INSTALLING ZSH..."
@@ -267,6 +275,7 @@ if [ "$OHMYZSH" = true ]; then
         ln -sf $HOME/dotfiles/.config/zsh/.zshrc $HOME/.zshrc
     fi
 fi
+
 
 if [ "$FISH" = true ] && [ "$SHELL" != "/usr/bin/fish" ] && [ "$SILENT" = false ]; then
     if [ "$SILENT" = false ]; then
