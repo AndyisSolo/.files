@@ -99,10 +99,6 @@ if [ "$DOTFILES" = true ]; then
         URL="https://github.com/asolopovas/dotfiles.git"
     fi
 
-    if [ "$FORCE" = true ]; then
-        rm -rf $HOME/dotfiles
-    fi
-
     if [ ! -d "$HOME/dotfiles" ]; then
         printGreen "DOWNLOADING DOTFILES..."
         git clone $URL $HOME/dotfiles >/dev/null
