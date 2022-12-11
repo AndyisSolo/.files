@@ -93,7 +93,7 @@ PATH=~/.local/share/gem/bin:$PATH
 PATH=~/.deno/bin:$PATH
 PATH=~/.nvm/bin:$PATH
 PATH=~/.yarn/bin:$PATH
-PATH=~/.go/bin:$PATH
+PATH=~/go/bin:$PATH
 
 # Load NVM
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"

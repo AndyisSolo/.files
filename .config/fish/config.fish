@@ -14,13 +14,12 @@ set -U fish_prompt_pwd_dir_length 0
 # Env Variables =========
 set -x TERMINAL alacritty
 set -x EDITOR nvim
-set -x GOPATH $HOME/.go
-set -x GOBIN $HOME/.go/bin
+set -x GOPATH $HOME/go
+set -x GOBIN $HOME/go/bin
 set -x GO111MODULE on
 
 # Path Variables =========
 set -x PATH $HOME/go/bin $PATH
-set -x PATH $PATH $GOPATH/bin
 
 function add2path
     if test -d $HOME/$argv; and not contains $HOME/$argv $PATH
@@ -28,6 +27,7 @@ function add2path
     end
 end
 
+add2path go/bin
 add2path .local/bin
 add2path .local/bin/helpers
 add2path .local/bin/helpers/apps
@@ -36,7 +36,6 @@ add2path .local/bin/helpers/system
 add2path .local/bin/helpers/tools
 add2path .local/bin/helpers/web
 add2path .local/share/gem/bin
-add2path go/bin
 add2path .yarn/bin
 add2path .deno/bin
 add2path .nvm/bin
