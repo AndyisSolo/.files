@@ -14,13 +14,6 @@ function printGreen() {
     printf "${GREEN}------------------------------------------${NC}\n"
 }
 
-CONFDIRS=(
-    ".config/.func"
-    ".config/.aliasrc"
-    ".config/inputrc"
-    ".config/fish"
-    ".bashrc"
-)
 PI=$HOME/dotfiles/helpers/system/p
 
 DOTFILES="${DOTFILES:-true}"
@@ -117,13 +110,13 @@ if [ "$DOTFILES" = true ]; then
 fi
 
 printGreen "CREATING DEFAULT DIRS ..."
-DEFAULT_DIR=(
+DEFAULT_DIRS=(
     ".local/bin"
     ".local/share"
     ".local/.config"
     ".local/.cache"
 )
-for DIR in "${DEFAULT_DIR[@]}"; do
+for DIR in "${DEFAULT_DIRS[@]}"; do
     if [ ! -d "$HOME/$DIR" ]; then
         printf "Creating $HOME/$DIR ...\n"
         mkdir -p "$HOME/$DIR"
@@ -131,13 +124,21 @@ for DIR in "${DEFAULT_DIR[@]}"; do
 done
 touch $HOME/.cache/.zsh_history
 
+
+printGreen "CREATING SYMLINKS ..."
+CONFDIRS=(
+    ".config/.func"
+    ".config/.aliasrc"
+    ".config/inputrc"
+    ".config/fish"
+    ".bashrc"
+)
 if [ "$NVIM" = true ]; then
     CONFDIRS+=(".config/nvim")
 fi
 if [ "$ZSH" = true ]; then
     CONFDIRS+=(".config/.zshrc")
 fi
-printGreen "CREATING SYMLINKS ..."
 mkdir -p $HOME/.local/bin
 echo "$HOME/dotfiles/helpers $HOME/.local/bin/helpers" | awk '{ printf "%-40s => %-40s\n", $1, $2}'
 ln -sf $HOME/dotfiles/helpers $HOME/.local/bin
@@ -197,7 +198,7 @@ if [ "$OHMYFISH" = true ] && command -v fish &>/dev/null; then
     fi
 fi
 
-if [ "$FDFIND" = true ] && ([ "$OS" = "ubuntu" ] || [ ""$OS"" = "debian" ]); then
+if [ "$FDFIND" = true ] && ! command -v fd &>/dev/null && ([ "$OS" = "ubuntu" ] || [ ""$OS"" = "debian" ]); then
     printGreen "INSTALLING FDFIND..."
     curl -fsSLO https://github.com/sharkdp/fd/releases/download/v8.5.3/fd-musl_8.5.3_amd64.deb >/dev/null
     sudo dpkg -i fd-musl_8.5.3_amd64.deb
@@ -231,7 +232,7 @@ if [ "$NVIM" = true ]; then
     fi
 
     if [ "$FORCE" = true ]; then
-        rm -rf $HOME/.local/share/nvim/site/autoload/
+        rm -rf $HOME/.local/share/nvim/site/autoload
     fi
 
     if [ ! -d "$HOME/.local/share/nvim/site/autoload/" ]; then
