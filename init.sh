@@ -15,6 +15,7 @@ function printGreen() {
 }
 
 PI=$HOME/dotfiles/helpers/system/p
+SYSTEM="${SYSTEM:-false}"
 DOTFILES="${DOTFILES:-true}"
 FISH="${FISH:-false}"
 FDFIND="${FDFIND:-false}"
@@ -30,6 +31,7 @@ FORCE="${FORCE:-false}"
 if [ "$SILENT" = false ]; then
     CHOICES=$(
         whiptail --title "Dotfiles" --checklist --separate-output "Choose:" 16 60 9 \
+            "SYSTEM" "Install host os settings" OFF \
             "DOTFILES" "Dotfiles   " ON \
             "FISH" "Unix shell   " ON \
             "FDFIND" "Unix find replacement   " ON \
@@ -50,6 +52,9 @@ if [ "$SILENT" = false ]; then
     else
         for CHOICE in $CHOICES; do
             case "$CHOICE" in
+            "SYSTEM")
+                SYSTEM=true
+                ;;
             "DOTFILES")
                 DOTFILES=true
                 ;;
@@ -67,11 +72,9 @@ if [ "$SILENT" = false ]; then
                 ;;
             "NVIM")
                 NVIM=true
-                DOTFILES+=(".config/nvim")
                 ;;
             "ZSH")
                 ZSH=true
-                DOTFILES+=(".config/.zshrc")
                 ;;
             "OHMYFISH")
                 OHMYFISH=true
@@ -120,20 +123,46 @@ for DIR in "${DEFAULT_DIRS[@]}"; do
 done
 touch $HOME/.cache/.zsh_history
 
-
 printGreen "CREATING SYMLINKS ..."
 CONFDIRS=(
+    ".bashrc"
     ".config/.func"
     ".config/.aliasrc"
-    ".config/inputrc"
-    ".config/fish"
-    ".bashrc"
 )
 
+if [ "$SYSTEM" = true ]; then
+    CONFDIRS+=(
+        ".config/alacritty"
+        ".config/Dharkael"
+        ".config/dunst"
+        ".config/gtk-2.0"
+        ".config/gtk-3.0"
+        ".config/pcmanfm"
+        ".config/polybar"
+        ".config/rofi"
+        ".config/tmux"
+        ".config/xmonad"
+        ".config/inputrc"
+        ".config/mimeapps.list"
+        ".config/picom.conf"
+        ".config/wall.jpg"
+        ".config/Xresources"
+        ".profile"
+        ".xprofile"
+        ".xinitrc"
+        ".ideavimrc"
+        ".gtkrc-2.0"
+        ".globignore"
+        ".gitconfig"
+    )
+fi
+
+if [ "$FISH" = true ]; then
+    CONFDIRS+=(".config/fish")
+fi
 if [ "$NVIM" = true ]; then
     CONFDIRS+=(".config/nvim")
 fi
-
 if [ "$ZSH" = true ]; then
     CONFDIRS+=(".config/.zshrc")
 fi
@@ -169,8 +198,8 @@ if [ "$NVM" = true ]; then
             echo 'nvm_get_arch() { nvm_echo "x64-musl"; }' | tee -a $HOME/.bashrc
         fi
         curl -sO https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh
-        chmod +x install.sh >/dev/null
-        ./install.sh >/dev/null 2>&1
+        chmod +x install.sh
+        ./install.sh
         rm -rf install.sh >/dev/null
         source $HOME/.nvm/nvm.sh >/dev/null
         source $HOME/.bashrc >/dev/null
@@ -178,7 +207,6 @@ if [ "$NVM" = true ]; then
         npm install -g yarn >/dev/null
     fi
 fi
-
 
 if [ "$OHMYFISH" = true ] && command -v fish &>/dev/null; then
     if [ "$FORCE" = true ]; then
@@ -197,14 +225,12 @@ if [ "$OHMYFISH" = true ] && command -v fish &>/dev/null; then
     fi
 fi
 
-
 if [ "$FDFIND" = true ] && ! command -v fd &>/dev/null && ([ "$OS" = "ubuntu" ] || [ ""$OS"" = "debian" ]); then
     printGreen "INSTALLING FDFIND..."
     curl -fsSLO https://github.com/sharkdp/fd/releases/download/v8.5.3/fd-musl_8.5.3_amd64.deb >/dev/null
     sudo dpkg -i fd-musl_8.5.3_amd64.deb
     rm -rf fd-musl_8.5.3_amd64.deb
 fi
-
 
 if [ "$FZF" = true ]; then
     if [ "$FORCE" = true ]; then
@@ -220,12 +246,12 @@ if [ "$FZF" = true ]; then
     fi
 fi
 
-
 if [ "$NVIM" = true ]; then
     if [ "$OS" = "ubuntu" ] || [ ""$OS"" = "debian" ]; then
         printGreen "INSTALLING NVIM..."
-        sudo add-apt-repository -y ppa:neovim-ppa/stable >/dev/null
-        sudo apt update -qq -y >/dev/null
+        curl -fsSLO https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.deb
+        sudo dpkg -i nvim-linux64.deb
+        sudo rm -f nvim-linux64.deb
         $PI r vim >/dev/null
     fi
 
@@ -245,7 +271,6 @@ if [ "$NVIM" = true ]; then
     fi
 fi
 
-
 if [ "$OHMYBASH" = true ]; then
     if [ "$FORCE" = true ]; then
         rm -rf $HOME/.local/share/ohmybash
@@ -256,7 +281,6 @@ if [ "$OHMYBASH" = true ]; then
         git clone https://github.com/ohmybash/oh-my-bash.git $HOME/.local/share/ohmybash
     fi
 fi
-
 
 if [ "$ZSH" = true ]; then
     printGreen "INSTALLING ZSH..."
@@ -275,7 +299,6 @@ if [ "$OHMYZSH" = true ]; then
         ln -sf $HOME/dotfiles/.config/zsh/.zshrc $HOME/.zshrc
     fi
 fi
-
 
 if [ "$FISH" = true ] && [ "$SHELL" != "/usr/bin/fish" ] && [ "$SILENT" = false ]; then
     if [ "$SILENT" = false ]; then
