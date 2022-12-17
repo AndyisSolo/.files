@@ -147,6 +147,7 @@ if [ "$SYSTEM" = true ]; then
         ".config/picom.conf"
         ".config/wall.jpg"
         ".config/Xresources"
+        ".config/autostart.sh"
         ".profile"
         ".xprofile"
         ".xinitrc"
