@@ -17,9 +17,6 @@ EOF
 }
 
 case "$CMD" in
-cd) 
-    cd $HOME/www/dev
-    ;;
 rebuild)
     pushd $HOME/www/dev
     docker compose build --parallel

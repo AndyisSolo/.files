@@ -37,10 +37,10 @@ alias gchk='git checkout '
 alias bfg='java -jar ~/.local/bin/bfg.jar '
 
 # System
-alias update-dotfiles='pushd $HOME/dotfiles; git pull; popd'
 alias dir-size='du -hd 1  2> /dev/null | sort -h'
 alias art='php artisan'
 alias rs='rsync -azr --info=progress2 '
 alias l='LC_ALL="C.UTF-8" ls -la --group-directories-first'
 alias ll='ls -lh --group-directories-first'
 alias xevkb='xev -event keyboard'
+alias cdweb='cd $HOME/www/dev'
