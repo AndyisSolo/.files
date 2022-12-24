@@ -1,35 +1,17 @@
 #!/bin/bash
 
-INCLUDE=(
-  "$HOME"
-  "www"
-  "git"
-)
+INCLUDE=()
+STORE=()
+while IFS= read -r line; do INCLUDE+=("$line"); done <$HOME/dotfiles/bookmarks.txt
 
-EXCLUDE=(
-  "node_modules"
-  "vendor"
-  ".cache"
-  ".cargo"
-  ".config"
-  ".git"
-  ".nvm"
-  ".yarn"
-  ".wp-env"
-  ".vscode"
-  ".local"
-  "test"
-  "uploads"
-  "zoom"
-  "mozilla"
-  "wp-includes"
-  "wp-admin"
-  "tests"
-  "alacritty"
-)
+for i in ${INCLUDE[@]}; do
+    P="$HOME/$i"
+    STORE+=$(find $P -maxdepth 1 -type d )
+done
+STORE+=("$HOME/dotfiles")
 
-result=$(fd -d 5 -H -t d --base-directory $HOME ${INCLUDE[@]/#/--search-path } ${EXCLUDE[@]/#/-E } | fzf)
+RESULT=$(printf "%s\n" "${STORE[@]}" | fzf)
 
-[ -z $result ] && exit
+[ -z $RESULT ] && exit
 
-code $result >/dev/null 2>&1
+code $RESULT >/dev/null 2>&1
