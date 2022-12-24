@@ -4,6 +4,7 @@ cmds="\
 leave
 suspend 
 reboot 
+halt
 shutdown
 "
 
@@ -24,12 +25,14 @@ case $choice in
     sudo -A systemctl suspend
     ;;
 
+  h*) 
+    sudo -A systemctl halt
+    ;;
   r*)
     sudo -A systemctl reboot
     ;;
-
   s*)
-    sudo -A systemctl poweroff
+    sudo -A /sbin/shutdown -P now
     ;;
 
 esac
