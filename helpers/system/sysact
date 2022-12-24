@@ -2,8 +2,8 @@
 
 cmds="\
 leave
-suspend 
-reboot 
+suspend
+reboot
 halt
 shutdown
 "
@@ -11,28 +11,24 @@ shutdown
 choice="$(echo "$cmds" | cut -d' ' -f 1 | dmenu)"
 
 case $choice in
-
-  l*)
-      $cryptomatorPID = $(pgrep Cryptomator)
-      if pgrep -x "Cryptomator" > /dev/null; then
+leave)
+    $cryptomatorPID = $(pgrep Cryptomator)
+    if pgrep -x "Cryptomator" >/dev/null; then
         kill -TERM $cryptomatorPID
-      fi
-      fusermount -uz /home/$USER/gdrive; 
-      kill -TERM $(pidof -s xmonad-x86_64-linux)
+    fi
+    fusermount -uz /home/$USER/gdrive
+    kill -TERM $(pidof -s xmonad-x86_64-linux)
     ;;
-
-  s*)
+suspend)
     sudo -A systemctl suspend
     ;;
-
-  h*) 
+halt)
     sudo -A systemctl halt
     ;;
-  r*)
+reboot)
     sudo -A systemctl reboot
     ;;
-  s*)
-    /sbin/shutdown -P now
+shutdown)
+    sudo -A systemctl poweroff
     ;;
-
 esac
