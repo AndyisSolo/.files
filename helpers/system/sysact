@@ -29,7 +29,7 @@ case $choice in
     ;;
 
   s*)
-    sudo -A poweroff
+    sudo -A poweroff -p
     ;;
 
 esac
