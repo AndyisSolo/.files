@@ -1,6 +1,34 @@
 #!/bin/bash
 
-result=$(fd -d 5 -H -t d --base-directory . --search-path ./www --search-path ./git -E node_modules -E vendor | fzf)
+INCLUDE=(
+  "$HOME"
+  "www"
+  "git"
+)
+
+EXCLUDE=(
+  "node_modules"
+  "vendor"
+  ".cache"
+  ".cargo"
+  ".config"
+  ".git"
+  ".nvm"
+  ".yarn"
+  ".wp-env"
+  ".vscode"
+  ".local"
+  "test"
+  "uploads"
+  "zoom"
+  "mozilla"
+  "wp-includes"
+  "wp-admin"
+  "tests"
+  "alacritty"
+)
+
+result=$(fd -d 5 -H -t d --base-directory $HOME ${INCLUDE[@]/#/--search-path } ${EXCLUDE[@]/#/-E } | fzf)
 
 [ -z $result ] && exit
 
