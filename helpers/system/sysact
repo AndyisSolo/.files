@@ -32,7 +32,7 @@ case $choice in
     sudo -A systemctl reboot
     ;;
   s*)
-    sudo -A /sbin/shutdown -P now
+    /sbin/shutdown -P now
     ;;
 
 esac
