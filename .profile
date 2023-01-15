@@ -83,6 +83,7 @@ export PS1="\W \$"
 
 PATH=/usr/local/go/bin:$PATH
 PATH=~/.config/composer/vendor/bin:$PATH
+PATH=~/.cargo/bin/$PATH
 PATH=~/.local/bin:$PATH
 PATH=~/.local/bin/helpers:$PATH
 PATH=~/.local/bin/helpers/apps:$PATH
@@ -96,7 +97,11 @@ PATH=~/.nvm/bin:$PATH
 PATH=~/.yarn/bin:$PATH
 PATH=~/go/bin:$PATH
 
+
+
 # Load NVM
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 . "$HOME/.cargo/env"
+
+

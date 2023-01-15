@@ -93,7 +93,7 @@ scrolling:
 font:
   # Normal (roman) font face
   normal:
-    family: FiraCode Nerd Font Mono
+    family: FuraMono Nerd Font
     style: Regular
     #
     # Default:
