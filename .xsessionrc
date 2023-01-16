@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+PATH=~/.cargo/bin:$PATH
+PATH=~/.config/composer/vendor/bin:$PATH
+PATH=~/.local/bin:$PATH
+PATH=~/.local/bin/helpers:$PATH
+PATH=~/.local/bin/helpers/apps:$PATH
+PATH=~/.local/bin/helpers/statusbar:$PATH
+PATH=~/.local/bin/helpers/system:$PATH
+PATH=~/.local/bin/helpers/tools:$PATH
+PATH=~/.local/bin/helpers/web:$PATH
+PATH=~/.local/share/gem/bin:$PATH
+PATH=~/.deno/bin:$PATH
+PATH=~/.nvm/bin:$PATH
+PATH=~/.yarn/bin:$PATH
+PATH=~/go/bin:$PATH
