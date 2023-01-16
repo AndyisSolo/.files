@@ -126,7 +126,7 @@ touch $HOME/.cache/.zsh_history
 printGreen "CREATING SYMLINKS ..."
 CONFDIRS=(
     ".bashrc"
-    ".xsession"
+    ".xsessionrc"
     ".config/.func"
     ".config/.aliasrc"
 )
