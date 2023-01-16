@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-
+#
+GDK_DPI_SCALE=0.75
 PATH=~/.cargo/bin:$PATH
 PATH=~/.config/composer/vendor/bin:$PATH
 PATH=~/.local/bin:$PATH

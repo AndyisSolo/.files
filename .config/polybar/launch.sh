@@ -4,7 +4,6 @@
 killall -q polybar
 net_interface=$(ip route show | grep default | awk '{print$5}')
 for i in /sys/class/hwmon/hwmon*/temp*_input; do 
-  echo $i
   if [[ $i == *"hwmon0/temp1_input"* || $i == *"hwmon4/temp1_input"* ]]; then
     cpu_temp=$i
   fi
