@@ -5,3 +5,8 @@
 
 # Fix Gnome Apps Slow  Start due to failing services
 # Add this when you include flatpak in your system
+
+
+if command -v syndaemon; then
+  syndaemon -i 0.5 -K -R &
+fi
