@@ -3,3 +3,8 @@
 if command -v syndaemon; then
   syndaemon -i 0.5 -K -R &
 fi
+
+xrandr --output eDP-1 --scale 0.83x0.83
+
+
+

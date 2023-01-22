@@ -56,12 +56,6 @@ import qualified Codec.Binary.UTF8.String as UTF8
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
--------------------------------------------
--- Colours
--------------------------------------------
-red       = "#fb4934"
-blue      = "#83a598"
-blue2     = "#2266d0"
 
 -------------------------------------------
 -- Globals
@@ -197,7 +191,7 @@ myKeyb =
     ("<XF86AudioPlay>",        spawn "playerctl play-pause"                             ),
     ("<XF86AudioStop>",        spawn "playerctl stop"                                   ),
     ("<XF86AudioPrev>",        spawn "playerctl previous"                               ),
-    ("<XF86AudioNext>",        spawn "playerctl next"                                   ), 
+    ("<XF86AudioNext>",        spawn "playerctl next"                                   ),
     ("<Print>",                spawn "flameshot gui"                                    ),
     ("<XF86MenuPB>",           spawn "flameshot gui"                                    )
 
@@ -265,6 +259,9 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 --------------------------------------------
 -- LogHook
 --------------------------------------------
+red       = "#fb4934"
+blue      = "#83a598"
+blue2     = "#2266d0"
 myLogHook :: D.Client -> PP
 myLogHook dbus = def
     {
@@ -390,7 +387,7 @@ myEventHook = myHandleEventHook
 
 spawnToWorkspace :: String -> String -> X ()
 spawnToWorkspace workspace program = do
-                                      spawnOnce program     
+                                      spawnOnce program
                                       windows $ W.greedyView workspace
 --------------------------------------------
 -- Startup Hook
@@ -439,5 +436,5 @@ main = do
         -- handleEventHook    = myEventHook,
         startupHook        = myStartupHook,
         logHook            = dynamicLogWithPP (myLogHook dbus)
-    } 
+    }
     `additionalKeysP` myKeyb

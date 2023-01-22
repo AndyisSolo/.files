@@ -40,6 +40,7 @@ export XMONAD_CACHE_HOME="${XDG_CACHE_HOME:-$H/opt/phpstorm/bin/phpstorm.shOME/.
 export XMONAD_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/xmonad"
 export XMONAD_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/xmonad"
 export HOSTALIASES=~/.hosts
+export GDK_SCALE=1.25
 
 FZFARGS="\
     -E \"*npm*\" \

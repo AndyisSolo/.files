@@ -47,7 +47,7 @@ st.alpha: 0.90;
 !! st.termname: st-256color
 !! st.borderpx: 2
 
-Xft.dpi:       96
+Xft.dpi:       112
 Xft.antialias: true
 Xft.hinting:   true
 Xft.rgba:      rgb

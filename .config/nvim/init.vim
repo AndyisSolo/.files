@@ -341,12 +341,12 @@ endfun
 " Source configs
 augroup autosourcing
   autocmd!
-  autocmd FileType java,php,ruby,python,javascript,conf,vim autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+  autocmd FileType java,php,ruby,python,javascript,ini,conf,vim autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
   autocmd BufWritePost ~/www/dev/.env silent! !dev rebuild
   autocmd BufWritePost ~/.config/i3/config silent! !i3-msg reload
   autocmd BufWritePost ~/Git/dwm/* silent! !rebuild-dwm
-  autocmd BufWritePost ~/.config/polybar/** silent! !~/.config/polybar/launch.sh
+autocmd BufWritePost ~/dotfiles/.config/polybar/** silent! !bash -c "~/dotfiles/.config/polybar/launch.sh"
   autocmd BufWritePost ~/.stalonetrayrc silent! !~/.local/bin/stalone-restart.sh
   autocmd BufWritePost ~/.config/dunst/dunstrc silent! !killall dunst & dunst &
   autocmd BufWritePost ~/.config/i3blocks/config silent! !i3-msg restart
