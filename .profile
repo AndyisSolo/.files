@@ -24,8 +24,8 @@ export GEM_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/gem"
 export GEM_SPEC_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/gem"
 export GNUPGHOME="${XDG_CONFIG_HOME:-$HOME/.config}/gnupg"
 export GNUPGHOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
-export GOPATH="$HOME/.go"
-export GOBIN="$HOME/.go/bin"
+export GOPATH="$HOME/go"
+export GOBIN="$HOME/go/bin"
 export GO111MODULE=on
 export GTK2_RC_FILES="$HOME/.config/gtk-2.0/.gtkrc-2.0"
 export INPUTRC="${XDG_CONFIG_HOME:-$HOME/.config}/inputrc"
@@ -44,7 +44,7 @@ export HOSTALIASES=~/.hosts
 FZFARGS="\
     -E \"*npm*\" \
     -E \"*lib*\" \
-    -E \"*.go/pkg/*\" \
+    -E \"*go/pkg/*\" \
     -E \"*vscode*\" \
     -E .git \
     -E .docker \

@@ -218,7 +218,7 @@ type = internal/date
 interval = 1
 
 date ="%d-%b-%Y"
-; date-alt = 
+; date-alt =
 
 time = %H:%M:%S
 time-alt = %H:%M:%S
@@ -228,111 +228,111 @@ format-underline = #0a6cf5
 
 label = %date% %time%
 
-[module/pulseaudio]
-type = internal/pulseaudio
+; [module/pulseaudio]
+; type = internal/pulseaudio
 
-; Sink to be used, if it exists (find using `pacmd list-sinks`, name field)
-; If not, uses default sink
-sink = alsa_output.pci-0000_12_00.3.analog-stereo
+; ; Sink to be used, if it exists (find using `pacmd list-sinks`, name field)
+; ; If not, uses default sink
+; sink = alsa_output.pci-0000_12_00.3.analog-stereo
 
-; Use PA_VOLUME_UI_MAX (~153%) if true, or PA_VOLUME_NORM (100%) if false
-; Default: true
-use-ui-max = true
+; ; Use PA_VOLUME_UI_MAX (~153%) if true, or PA_VOLUME_NORM (100%) if false
+; ; Default: true
+; use-ui-max = true
 
-; Interval for volume increase/decrease (in percent points)
-; Default: 5
-interval = 5
-; Available tags:
-;   <label-volume> (default)
-;   <ramp-volume>
-;   <bar-volume>
-format-volume = <ramp-volume> <label-volume>
+; ; Interval for volume increase/decrease (in percent points)
+; ; Default: 5
+; interval = 5
+; ; Available tags:
+; ;   <label-volume> (default)
+; ;   <ramp-volume>
+; ;   <bar-volume>
+; format-volume = <ramp-volume> <label-volume>
 
-; Available tags:
-;   <label-muted> (default)
-;   <ramp-volume>
-;   <bar-volume>
-;format-muted = <label-muted>
+; ; Available tags:
+; ;   <label-muted> (default)
+; ;   <ramp-volume>
+; ;   <bar-volume>
+; ;format-muted = <label-muted>
 
-; Available tokens:
-;   %percentage% (default)
-;   %decibels% (unreleased)
-;label-volume = %percentage%%
+; ; Available tokens:
+; ;   %percentage% (default)
+; ;   %decibels% (unreleased)
+; ;label-volume = %percentage%%
 
-; Available tokens:
-;   %percentage% (default)
-;   %decibels% (unreleased)
-label-muted = 🔇 muted
-label-muted-foreground = #666
+; ; Available tokens:
+; ;   %percentage% (default)
+; ;   %decibels% (unreleased)
+; label-muted = 🔇 muted
+; label-muted-foreground = #666
 
-; Only applies if <ramp-volume> is used
-ramp-volume-0 = 🔈
-ramp-volume-1 = 🔉
-ramp-volume-2 = 🔊
+; ; Only applies if <ramp-volume> is used
+; ramp-volume-0 = 🔈
+; ramp-volume-1 = 🔉
+; ramp-volume-2 = 🔊
 
-; Right and Middle click (unreleased)
-click-right = pavucontrol &
-; click-middle = 
+; ; Right and Middle click (unreleased)
+; click-right = pavucontrol &
+; ; click-middle =
 
-[module/alsa]
-type = internal/alsa
+; [module/alsa]
+; type = internal/alsa
 
-format-volume = <label-volume> <bar-volume>
-label-volume = VOL
-label-volume-foreground = ${root.foreground}
+; format-volume = <label-volume> <bar-volume>
+; label-volume = VOL
+; label-volume-foreground = ${root.foreground}
 
-format-muted-prefix = " "
-format-muted-foreground = ${colors.foreground-alt}
-label-muted = sound muted
+; format-muted-prefix = " "
+; format-muted-foreground = ${colors.foreground-alt}
+; label-muted = sound muted
 
-bar-volume-width = 10
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #ff5555
-bar-volume-gradient = false
-bar-volume-indicator = |
-bar-volume-indicator-font = 2
-bar-volume-fill = ─
-bar-volume-fill-font = 2
-bar-volume-empty = ─
-bar-volume-empty-font = 2
-bar-volume-empty-foreground = ${colors.foreground-alt}
+; bar-volume-width = 10
+; bar-volume-foreground-0 = #55aa55
+; bar-volume-foreground-1 = #55aa55
+; bar-volume-foreground-2 = #55aa55
+; bar-volume-foreground-3 = #55aa55
+; bar-volume-foreground-4 = #55aa55
+; bar-volume-foreground-5 = #f5a70a
+; bar-volume-foreground-6 = #ff5555
+; bar-volume-gradient = false
+; bar-volume-indicator = |
+; bar-volume-indicator-font = 2
+; bar-volume-fill = ─
+; bar-volume-fill-font = 2
+; bar-volume-empty = ─
+; bar-volume-empty-font = 2
+; bar-volume-empty-foreground = ${colors.foreground-alt}
 
-[module/powermenu]
-type = custom/menu
-expand-right = true
-format-spacing = 1
+; [module/powermenu]
+; type = custom/menu
+; expand-right = true
+; format-spacing = 1
 
-label-open = 
-label-open-foreground = ${colors.secondary}
-label-close =  cancel
-label-close-foreground = ${colors.secondary}
-label-separator = |
-label-separator-foreground = ${colors.foreground-alt}
+; label-open = 
+; label-open-foreground = ${colors.secondary}
+; label-close =  cancel
+; label-close-foreground = ${colors.secondary}
+; label-separator = |
+; label-separator-foreground = ${colors.foreground-alt}
 
-menu-0-0 = reboot
-menu-0-0-exec = menu-open-1
-menu-0-1 = power off
-menu-0-1-exec = menu-open-2
+; menu-0-0 = reboot
+; menu-0-0-exec = menu-open-1
+; menu-0-1 = power off
+; menu-0-1-exec = menu-open-2
 
-menu-1-0 = cancel
-menu-1-0-exec = menu-open-0
-menu-1-1 = reboot
-menu-1-1-exec = sudo reboot
+; menu-1-0 = cancel
+; menu-1-0-exec = menu-open-0
+; menu-1-1 = reboot
+; menu-1-1-exec = sudo reboot
 
-menu-2-0 = power off
-menu-2-0-exec = sudo poweroff
-menu-2-1 = cancel
-menu-2-1-exec = menu-open-0
+; menu-2-0 = power off
+; menu-2-0-exec = sudo poweroff
+; menu-2-1 = cancel
+; menu-2-1-exec = menu-open-0
 
-[module/xmonad]
-type = custom/script
-exec = xmonad-log
-tail = true
-format-background = ${colors.background}
-format-foreground = ${colors.foreground}
+; [module/xmonad]
+; type = custom/script
+; exec = xmonad-log
+; tail = true
+; format-background = ${colors.background}
+; format-foreground = ${colors.foreground}
 

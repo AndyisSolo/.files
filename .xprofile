@@ -1,12 +1,5 @@
 #!/usr/bin/env sh
 
-# This file runs when a DM logs you into a graphical session.
-# If you use startx/xinit like a Chad, this file will also be sourced.
-
-# Fix Gnome Apps Slow  Start due to failing services
-# Add this when you include flatpak in your system
-
-
 if command -v syndaemon; then
   syndaemon -i 0.5 -K -R &
 fi
