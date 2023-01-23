@@ -43,7 +43,7 @@ Plug 'tpope/vim-commentary'           " Comment Plugin
 Plug 'tpope/vim-surround'             " Souround with various tags
 Plug 'stephpy/vim-php-cs-fixer'       " File Formatter
 Plug 'SirVer/ultisnips'               " Snippets Engine
-Plug 'jiangmiao/auto-pairs'           " Doubles Quotes, Parenthesis etc.
+"Plug 'jiangmiao/auto-pairs'           " Doubles Quotes, Parenthesis etc.
 Plug 'vim-airline/vim-airline'        " Vim status bar
 Plug 'jeetsukumaran/vim-buffergator'  " Vim buffer management
 "Plug 'craigemery/vim-autotag'        " Update Ctags automatically

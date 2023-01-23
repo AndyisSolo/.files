@@ -63,6 +63,7 @@ import qualified Data.Map        as M
 -- myTerminal      = "alacritty"
 myTerminal      = "alacritty"
 myBrowser       = "google-chrome --no-default-browser-check --force-dark-mode"
+myFilebrowser   = "thunar"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -177,7 +178,7 @@ myKeyb =
     ("M-m",              namedScratchpadAction myScratchPads "spotify"       ),
     ("M-c",              namedScratchpadAction myScratchPads "browser"       ),
     ("M-b"  ,            namedScratchpadAction myScratchPads "firefox"       ),
-    ("M-x",              namedScratchpadAction myScratchPads "pcmanfm"       ),
+    ("M-x",              namedScratchpadAction myScratchPads "filebrowser"       ),
     ("M-S-x",            namedScratchpadAction myScratchPads "pcmanfmSearch" ),
     ("M-S-<Return>",     namedScratchpadAction myScratchPads "terminal"      ),
     ("<XF86Launch6>",    namedScratchpadAction myScratchPads "pavucontrol"   ),
@@ -202,16 +203,15 @@ myKeyb =
 -------------------------------------------
 myScratchPads =
   [
-    NS "terminal"      spawnTerm                                    (title     =? "scratchpad")        mediumFloat,
-    NS "spotify"       "flatpak run com.spotify.Client"             (className =? "Spotify")           largeFloat,
-    NS "browser"       currentBrowser                               (className =? "Google-chrome")     nonFloating,
-    NS "firefox"       "firefox --class='FirefoxScratchpad'"        (className =? "FirefoxScratchpad") nonFloating,
-    NS "pcmanfm"       "pcmanfm"                                    (className =? "Pcmanfm")           defaultFloating,
-    NS "pcmanfmSearch" "fzfmenu fzf-pcmanfm"                        (className =? "Pcmanfm")           defaultFloating,
-    NS "pavucontrol"   "pavucontrol"                                (className =? "Pavucontrol")       mediumFloat,
-    NS "thunderbird"   "thunderbird"                                (className =? "Thunderbird")       largeFloat,
-    NS "stacer"        "sudo -A /usr/bin/stacer > ~/tmp/stacer.log" (className =? "stacer")            mediumFloat,
-    NS "calc"          "gnome-calculator"                           (className =? "Gnome-calculator")  mediumFloat
+    NS "terminal"       spawnTerm                                    (title     =? "scratchpad")         mediumFloat,
+    NS "spotify"       "flatpak run com.spotify.Client"              (className =? "Spotify")            largeFloat,
+    NS "browser"        currentBrowser                               (className =? "Google-chrome")      nonFloating,
+    NS "filebrowser"    myFilebrowser                                (className =? "Thunar")             nonFloating,
+    NS "firefox"       "firefox --class='FirefoxScratchpad'"         (className =? "FirefoxScratchpad")  nonFloating,
+    NS "pavucontrol"   "pavucontrol"                                 (className =? "Pavucontrol")        mediumFloat,
+    NS "thunderbird"   "thunderbird"                                 (className =? "Thunderbird")        largeFloat,
+    NS "stacer"        "sudo -A /usr/bin/stacer > ~/tmp/stacer.log"  (className =? "stacer")             mediumFloat,
+    NS "calc"          "gnome-calculator"                            (className =? "Gnome-calculator")   mediumFloat
   ]
 
   where
@@ -223,7 +223,6 @@ myScratchPads =
                        w = 0.5
                        t = 0.7 -h
                        l = 0.7 -w
-
     mediumFloat    = customFloating $ W.RationalRect l t w h
                      where
                        h = 0.6
