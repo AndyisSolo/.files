@@ -13,14 +13,14 @@
 
 !! yellow dark/light
 *color3:                          #FFD80D
-*color11:                         #FFD80D
+*color11:                         #E9AD0C
 !! blue dark/light
 *color4:                          #2643B1
 *color12:                         #267fb5
 
 !! magenta dark/light
-*color5:                          #823F72
-*color13:                         #ba8baf
+*color5:                          #C061CB
+*color13:                         #823F72
 
 !! cyan dark/light
 *color6:                          #267fb5
