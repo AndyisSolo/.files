@@ -1,2 +1,10 @@
-#!/bin/sh
-xrandr --output eDP-1 --mode 1600x900
+#!/bin/bash
+
+display="eDP-1"
+mode="1600x900"
+
+if xrandr | grep "$display" | grep " connected "; then
+  xrandr --output "$display" --mode "$mode"
+fi
+
+exit 0
