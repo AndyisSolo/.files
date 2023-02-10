@@ -1,23 +1,29 @@
 #!/bin/bash
 
-XMONAD_ORIGIN=$HOME/dotfiles/.config/xmonad
-XMONAD_DIR=$HOME/.config/xmonad
+XMONAD_ORIGIN=$HOME/dotfiles/.config/xmonad/
 
-ln -sf $XMONAD_ORIGIN $XMONAD_DIR
-
+ln -sf $XMONAD_ORIGIN $XDG_CONFIG_HOME
 
 sudo apt install g++ gcc libc6-dev libffi-dev libgmp-dev \
-                 make xz-utils zlib1g-dev git gnupg netbase \
-                 git libx11-dev libxft-dev libxinerama-dev \
-                 libxrandr-dev libxss-dev haskell-stack -y
+    make xz-utils zlib1g-dev git gnupg netbase \
+    git libx11-dev libxft-dev libxinerama-dev \
+    libxrandr-dev libxss-dev haskell-stack polybar -y
+
+sudo apt install curl cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 -y
 
 sudo snap install go --classic
 
-pushd $XMONAD_DIR
+pushd $XDG_CONFIG_HOME/xmonad
 
-if [ ! -d ./xmonad ]; then
+# Cargo Install
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+# Alacritty
+cargo install alacritty
+
+if [ ! -d $XMONAD_DIR/xmonad ]; then
     git clone --branch v0.17.1 https://github.com/xmonad/xmonad
 fi
+
 if [ ! -d ./xmonad-contrib ]; then
     git clone --branch v0.17.1 https://github.com/xmonad/xmonad-contrib
 fi
@@ -46,3 +52,15 @@ if [ ! -d $xmonadLog ]; then
     go build
     go install
 fi
+
+sudo tee /usr/share/xsessions/xmonad.desktop >/dev/null <<EOT
+[Desktop Entry]
+Name=Xmonad
+Comment=Xmonad is a tiling window manager
+Exec=$HOME/.cache/xmonad/xmonad-x86_64-linux
+Type=Application
+DesktopNames=Xmonad
+X-GDM-SessionRegisters=true
+EOT
+
+

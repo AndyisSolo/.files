@@ -7,4 +7,3 @@ if xrandr | grep "$display" | grep " connected "; then
   xrandr --output "$display" --mode "$mode"
 fi
 
-exit 0
