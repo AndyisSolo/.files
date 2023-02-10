@@ -204,7 +204,7 @@ myKeyb =
 myScratchPads =
   [
     NS "terminal"       spawnTerm                                    (title     =? "scratchpad")         mediumFloat,
-    NS "spotify"       "flatpak run com.spotify.Client"              (className =? "Spotify")            largeFloat,
+    NS "spotify"       "snap run spotify"                            (className =? "Spotify")            largeFloat,
     NS "browser"        currentBrowser                               (className =? "Google-chrome")      nonFloating,
     NS "filebrowser"    myFilebrowser                                (className =? "Thunar")             nonFloating,
     NS "firefox"       "firefox --class='FirefoxScratchpad'"         (className =? "FirefoxScratchpad")  nonFloating,
