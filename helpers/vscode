@@ -6,9 +6,15 @@ while IFS= read -r line; do INCLUDE+=("$line"); done <$HOME/dotfiles/bookmarks.t
 
 for i in ${INCLUDE[@]}; do
     P="$HOME/$i"
-    STORE+=$(find $P -maxdepth 1 -type d )
+    for dir in $P/*; do 
+      if [ -d $dir ]; then
+        STORE+=("$dir")
+      fi
+    done
 done
+
 STORE+=("$HOME/dotfiles")
+echo $STORE
 
 RESULT=$(printf "%s\n" "${STORE[@]}" | fzf)
 
