@@ -18,6 +18,7 @@ import XMonad.Util.NamedScratchpad
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NoTaskbar
 
+
 -- Layouts
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Magnifier
@@ -43,6 +44,7 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks (manageDocks, docks, avoidStruts)
 import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat, doCenterFloat)
 import XMonad.Hooks.DynamicProperty ( dynamicPropertyChange )
+import XMonad.Hooks.WindowSwallowing
 
 import Data.Monoid
 import System.Exit
@@ -373,8 +375,11 @@ myManageHook = composeAll
 --------------------------------------------
 -- Event handling
 --------------------------------------------
-myHandleEventHook :: Event -> X All
-myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> floating)
+winSwallowHook :: Event -> X All
+winSwallowHook = swallowEventHook ( className =? "Alacritty" ) (return True)
+
+spotifyHook :: Event -> X All
+spotifyHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> floating)
     where floating  = customFloating $ W.RationalRect l t w h
                       where
                           h = 0.9
@@ -382,7 +387,7 @@ myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> floa
                           t = 0.95 -h
                           l = 0.95 -w
 
-myEventHook = myHandleEventHook
+myHandleEventHook = winSwallowHook <+> spotifyHook
 
 spawnToWorkspace :: String -> String -> X ()
 spawnToWorkspace workspace program = do
@@ -431,8 +436,7 @@ main = do
         -- hooks, layouts
         layoutHook         = myLayout,
         manageHook         = placeHook myPlacement <+> myManageHook,
-        handleEventHook    = myEventHook,
-        -- handleEventHook    = myEventHook,
+        handleEventHook    = myHandleEventHook,
         startupHook        = myStartupHook,
         logHook            = dynamicLogWithPP (myLogHook dbus)
     }
