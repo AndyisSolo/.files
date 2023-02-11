@@ -17,6 +17,8 @@ EOF
 }
 
 case "$CMD" in
+wp)
+    
 rebuild)
     pushd $HOME/www/dev
     docker compose build --parallel

@@ -2,7 +2,7 @@
 
 function add_host_redirection {
   exists=$(getent hosts $1)
-  if [ -z "$exists" ]; then 
+  if [ -z "$exists" ]; then
     echo "127.0.0.1 $1" | sudo tee -a /etc/hosts > /dev/null
   fi
 }
@@ -27,11 +27,11 @@ case "$1" in
     fi
     # Extract Wordpress
     if [ ! -d  ~/www/$2 ]; then
-      pushd ~/www > /dev/null 
-      tar xfz wordpress.tar.gz 
+      pushd ~/www > /dev/null
+      tar xfz wordpress.tar.gz
       [ ! -z $2 ] && mv ~/www/wordpress ~/www/$2
-      popd > /dev/null 
-    fi 
+      popd > /dev/null
+    fi
     # Add Hosts Redirection
     add_host_redirection $2
     # Setup Wordpress Config
@@ -39,16 +39,16 @@ case "$1" in
     wp_config_setup ~/www/$2 "${root}_wp" secret
     # Setup Database
     pushd ~/www/dev > /dev/null
-    docker-compose exec mariadb mysql -uroot -psecret -e "CREATE USER IF NOT EXISTS ${root}_wp@'%' IDENTIFIED BY 'secret';" 
-    docker-compose exec mariadb mysql -uroot -psecret -e "CREATE DATABASE IF NOT EXISTS ${root}_wp;" 
-    docker-compose exec mariadb mysql -uroot -psecret -e "GRANT ALL PRIVILEGES ON ${root}_wp.* TO ${root}_wp@'%'" 
+    docker compose exec mariadb mysql -uroot -psecret -e "CREATE USER IF NOT EXISTS ${root}_wp@'%' IDENTIFIED BY 'secret';"
+    docker compose exec mariadb mysql -uroot -psecret -e "CREATE DATABASE IF NOT EXISTS ${root}_wp;"
+    docker compose exec mariadb mysql -uroot -psecret -e "GRANT ALL PRIVILEGES ON ${root}_wp.* TO ${root}_wp@'%'"
     popd > /dev/null
 
     ;;
   *) cat << EOF
-ssl-cert: Generates 
+ssl-cert: Generates
 
 Allowed options:
-    wordpress {domain} 
+    wordpress {domain}
 EOF
 esac
