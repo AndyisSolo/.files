@@ -1,9 +1,9 @@
 #!/bin/fish
 
-# Start Gnome Keyring
-if set -q DESKTOP_SESSION
-    set -x (gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg | string split "=")
-end
+# # Start Gnome Keyring
+# if set -q DESKTOP_SESSION
+#     set -x (gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg | string split "=")
+# end
 
 # Fish ==================
 fish_default_key_bindings
