@@ -20,15 +20,15 @@ leave)
     kill -TERM $(pidof -s xmonad-x86_64-linux)
     ;;
 suspend)
-    sudo -A systemctl suspend
+      systemctl suspend
     ;;
 halt)
-    sudo -A systemctl halt
+      systemctl halt
     ;;
 reboot)
-    sudo -A systemctl reboot
+    systemctl reboot
     ;;
 shutdown)
-    sudo -A systemctl poweroff
+    systemctl poweroff
     ;;
 esac

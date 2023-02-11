@@ -6,6 +6,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export SUDO_ASKPASS="$HOME/dotfiles/helpers/tools/dmenupass"
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 export QT_QPA_PLATFORMTHEME="qt5ct"
+export SSH_AUTH_SOCK="$GNOME_KEYRING_CONTROL/ssh"
 
 # Applications
 export FILEMANAGER="pcmanfm"

@@ -56,11 +56,10 @@ fi
 sudo tee /usr/share/xsessions/xmonad.desktop >/dev/null <<EOT
 [Desktop Entry]
 Name=Xmonad
-Comment=Xmonad is a tiling window manager
+Comment=Lightweight Tiling Window Manager
 Exec=$HOME/.cache/xmonad/xmonad-x86_64-linux
-Type=Application
+Type=XSession
 DesktopNames=Xmonad
-X-GDM-SessionRegisters=true
 EOT
 
 
