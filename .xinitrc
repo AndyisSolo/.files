@@ -3,5 +3,5 @@
 
 [ -f ~/.xprofile ] && . ~/.xprofile
 
-# exec $HOME/.cache/xmonad/xmonad-x86_64-linux
+exec $HOME/.cache/xmonad/xmonad-x86_64-linux
 
