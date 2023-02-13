@@ -4,12 +4,11 @@ XMONAD_ORIGIN=$HOME/dotfiles/.config/xmonad/
 
 ln -sf $XMONAD_ORIGIN $XDG_CONFIG_HOME/xmonad
 
-sudo apt install g++ gcc libc6-dev libffi-dev libgmp-dev \
-    make xz-utils zlib1g-dev git gnupg netbase \
-    git libx11-dev libxft-dev libxinerama-dev \
-    libxrandr-dev libxss-dev haskell-stack polybar -y
-
-sudo apt install curl cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 -y
+sudo apt install cmake curl g++ gcc git gnupg haskell-stack \
+                 libc6-dev libffi-dev libfontconfig1-dev libfreetype6-dev \
+                 libgmp-dev libx11-dev libxcb-xfixes0-dev libxft-dev \
+                 libxinerama-dev libxkbcommon-dev libxrandr-dev libxss-dev \
+                 make netbase pkg-config polybar python3 xz-utils zlib1g-dev -y
 
 sudo snap install go --classic
 
