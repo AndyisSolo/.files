@@ -4,25 +4,14 @@ XMONAD_ORIGIN=$HOME/dotfiles/.config/xmonad/
 
 ln -sf $XMONAD_ORIGIN $XDG_CONFIG_HOME/xmonad
 
-sudo apt install cmake curl g++ gcc git gnupg haskell-stack \
-                 libc6-dev libffi-dev libfontconfig1-dev libfreetype6-dev \
-                 libgmp-dev libx11-dev libxcb-xfixes0-dev libxft-dev \
-                 libxinerama-dev libxkbcommon-dev libxrandr-dev libxss-dev \
-                 make netbase pkg-config polybar python3 xz-utils zlib1g-dev -y
 
-sudo snap install go --classic
 
-# Cargo Install
-curl https://sh.rustup.rs -sSf | sh -s -- -y
-# Alacritty
-cargo install alacritty
 
 xmonadLog="$GOPATH/src/github.com/xintron/xmonad-log"
 if [ ! -d $xmonadLog ]; then
     mkdir -p $xmonadLog
     pushd $xmonadLog
-    $GOPATH/src/github.com/xintron/xmonad-log
-    git clone https://github.com/xintron/xmonad-log.git $xmonadLog
+    git clone https://github.com/xintron/xmonad-log.git
     go get github.com/godbus/dbus
     go mod init
     go build
