@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Don't ask sudo multiple times
+echo 'Defaults !tty_tickets' >> /etc/sudoers
+
+newStr='%admin ALL=(ALL:ALL) NOPASSWD: /usr/sbin/shutdown,/usr/sbin/reboot,/usr/bin/mount,/usr/bin/umount,/usr/bin/apt update -y,/usr/bin/apt upgrade -y'
+sudo sed -i -e "s|^%admin.*|${newStr}|g" /etc/sudoers
+
 sudo apt install build-essential cmake curl g++ gcc git gnupg \
     libc6-dev libffi-dev libfontconfig1-dev libfreetype6-dev \
     libgmp-dev libx11-dev libxcb-xfixes0-dev libxft-dev \
@@ -20,4 +26,5 @@ cargo install alacritty
 sudo snap install go --classic
 sudo snap install telegram-desktop
 sudo snap install docker
+
 
