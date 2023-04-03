@@ -65,7 +65,7 @@ import qualified Data.Map        as M
 -- myTerminal      = "alacritty"
 myTerminal      = "alacritty"
 myBrowser       = "google-chrome --no-default-browser-check --force-dark-mode"
-myFilebrowser   = "thunar"
+myFilebrowser   = "nautilus"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
