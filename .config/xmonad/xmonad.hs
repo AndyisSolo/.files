@@ -156,13 +156,13 @@ myKeyb =
     ("M-S-i",          sendMessage MirrorExpand        ), -- Vertical Expand Layout
 
     --Applications
-    ("M-<Return>",     spawn myTerminal               ),
-    ("M-d",            spawn "rofi -show run"         ),
-    ("M-S-d",          spawn "su_dmenu_run"           ),
-    ("M-0",            spawn "sysact"                 ),
-    ("M-p",            spawn "fzfmenu storm"          ),
-    ("M-o",            spawn "fzfmenu vscode"         ),
-    ("M-S-p",          spawn "fzfmenu fzfalacritty"   ),
+    ("M-<Return>",     spawn myTerminal                 ),
+    ("M-d",            spawn "rofi -show run"           ),
+    ("M-S-d",          spawn "su_dmenu_run"             ),
+    ("M-0",            spawn "sysact"                   ),
+    ("M-p",            spawn "fzfmenu storm"            ),
+    ("M-o",            spawn "fzfmenu open-folder-code" ),
+    ("M-S-p",          spawn "fzfmenu fzfalacritty"     ),
 
     --Layouts
     ("M-.",           sendMessage (IncMasterN 1)      ), -- Increase number of clients in master pane
